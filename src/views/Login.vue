@@ -1,14 +1,5 @@
 <template>
     <VContainer>
-        <!--  -->
-
-        <!--<VBtn color="info" @click="getUser">Login</VBtn> -->
-
-        {{ authStore.isLoggeddIn }}
-        <br>
-        <pre>
-            {{ meStore.user }}
-        </pre>
         <VTextField v-model="email" />
         <VTextField v-model="password" />
         <VBtn color="success" @click="login">Login</VBtn>
@@ -20,21 +11,22 @@
 
 import { ref } from 'vue';
 import { useAuth } from '@/store/auth';
-import { useMe } from '@/store/me';
+import { useRouter } from 'vue-router';
 
-const meStore = useMe();
+const router = useRouter();
 const authStore = useAuth();
-
 
 const email = ref('test@example.com');
 const password = ref('password');
-''
+
 function sunctun() {
     authStore.sanctum();
 }
 
 function login() {
-    authStore.login(email.value, password.value);
+    authStore.login(email.value, password.value).then(() => {
+        router.push({ name: 'dashboard' });
+    });
 }
 
 </script>

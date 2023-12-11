@@ -1,19 +1,11 @@
-// Composables
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuth } from '@/store/auth';
-//parei em  2:09:00
+import { auth, redirectIfAuthenticated } from './guard';
+
 const routes = [
   {
-    path: '/Login',
+    path: '/login',
     component: () => import('@/layouts/Login.vue'),
-    beforeEnter: (to, from, next) => {
-      const authStore = useAuth();
-      if (authStore.isLoggeddIn) {
-        next({ name: 'dashboard' })
-      } else {
-        next();
-      }
-    },
+    beforeEnter: auth,
     children: [
       {
         path: '',
@@ -25,14 +17,7 @@ const routes = [
   {
     path: '/',
     component: () => import('@/layouts/Dashboard.vue'),
-    beforeEnter: (to, from, next) => {
-      const authStore = useAuth();
-      if (!authStore.isLoggeddIn) {
-        next({ name: 'login' })
-      } else {
-        next();
-      }
-    },
+    beforeEnter: redirectIfAuthenticated,
     children: [
       {
         path: '',

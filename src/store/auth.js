@@ -11,11 +11,13 @@ export const useAuth = defineStore('auth', {
             return axios.get('sanctum/csrf-cookie');
         },
         login(email, password) {
+            const meStore = useMe()
             return axios.post('api/login', {
                 email, password,
+            }).then(r => {
+                meStore.user = r.data.data
             })
-        },
-        logout() { },
+        }
     },
     getters: {
         isLoggeddIn() {
