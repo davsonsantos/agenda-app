@@ -5,7 +5,7 @@ const routes = [
   {
     path: '/login',
     component: () => import('@/layouts/Login.vue'),
-    beforeEnter: auth,
+    beforeEnter: redirectIfAuthenticated,
     children: [
       {
         path: '',
@@ -17,7 +17,7 @@ const routes = [
   {
     path: '/',
     component: () => import('@/layouts/Dashboard.vue'),
-    beforeEnter: redirectIfAuthenticated,
+    beforeEnter: auth,
     children: [
       {
         path: '',
