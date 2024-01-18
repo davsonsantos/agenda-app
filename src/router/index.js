@@ -1,43 +1,14 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import { auth, redirectIfAuthenticated } from './guard';
-import { useAuth } from '@/store/auth'
+/**
+ * router/index.ts
+ *
+ * Automatic routes for `./src/pages/*.vue`
+ */
 
-
-const routes = [
-  {
-    path: '/login',
-    component: () => import('@/layouts/Login.vue'),
-    beforeEnter: redirectIfAuthenticated,
-    children: [
-      {
-        path: '',
-        name: 'login',
-        component: () => import('@/views/Login.vue'),
-      },
-    ],
-  },
-  {
-    path: '/',
-    component: () => import('@/layouts/Dashboard.vue'),
-    beforeEnter: auth,
-    children: [
-      {
-        path: '',
-        name: 'dashboard',
-        component: () => import('@/views/Dashboard.vue'),
-      },
-    ],
-  },
-]
+// Composables
+import { createRouter, createWebHistory } from 'vue-router/auto'
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+  history: createWebHistory(process.env.BASE_URL),
 })
 
-router.beforeEach((to, from, next) => {
-  const authStore = useAuth()
-  authStore.sanctum();
-  next()
-})
 export default router
