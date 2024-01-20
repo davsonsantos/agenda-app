@@ -1,1 +1,0 @@
-import{n as e,o as a,e as t,w as o,b as n,u as s,G as r,R as u}from"./index-Gultbhm0.js";const f=e({__name:"BlankLayout",setup(c){return(p,_)=>(a(),t(r,null,{default:o(()=>[n(s(u))]),_:1}))}});export{f as default};
