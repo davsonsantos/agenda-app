@@ -10,8 +10,11 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v3
 
-      - name: Yarn Build
-        run: yarn build
+      - name: Use Node.js 20.11
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.11
+        - run: yarn install
 
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
