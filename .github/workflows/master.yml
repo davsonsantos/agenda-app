@@ -8,17 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Get latest code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Yarn Install
-      - uses: borales/actions-yarn@v2.0.0
+      - uses: actions/setup-node@v3
         with:
-          cmd: install
-
-      - name: Yarn Build
-      - uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: build
+          node-version: "20"
+          cache: "yarn"
+      - run: yarn
+      - run: yarn build
 
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
