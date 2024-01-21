@@ -1,0 +1,1 @@
+import{I as n,o as r,c as l,d as t,a as e,t as a,u as o,F as c}from"./index--VPY2nLe.js";const u=e("br",null,null,-1),_=e("br",null,null,-1),g={__name:"index",setup(d){const s=n();return(i,p)=>(r(),l(c,null,[t(" Dashboad "),u,e("pre",null,a(o(s).user),1),_,t(" Tá logado: "+a(o(s).isLoggedIn),1)],64))}};export{g as default};
