@@ -50,17 +50,21 @@
 </template>
 
 <script setup>
-import axios from "axios";
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useForm, useField } from "vee-validate";
 import { object, string } from "yup";
+import { useAuthStore } from "@/store/auth";
 const schema = object({
   email: string().required().email().label("E-mail"),
   password: string().required().label("Senha"),
 });
 const { handleSubmit, errors, isSubmitting } = useForm({
   validationSchema: schema,
+  initialValues: {
+    email: "test@example.com",
+    password: "password",
+  },
 });
 
 const submit = handleSubmit(async (values) => {
@@ -70,26 +74,20 @@ const submit = handleSubmit(async (values) => {
 const { value: email } = useField("email");
 const { value: password } = useField("password");
 
-axios.defaults.withCredentials = true;
-axios.defaults.withXSRFToken = true;
-
 const feedbackMessage = ref("");
+const authStore = useAuthStore();
 const router = useRouter();
 
 function login(values) {
   feedbackMessage.value = "";
-  axios.get("http://localhost:81/sanctum/csrf-cookie").then(() => {
-    axios
-      .post("http://localhost:81/api/login", {
-        email: values.email,
-        password: values.password,
-      })
-      .then(() => {
-        router.push({ name: "dashboard" });
-      })
-      .catch(() => {
-        feedbackMessage.value = "Email ou senha inválidos";
-      });
-  });
+
+  authStore
+    .login(values.email, values.password)
+    .then(() => {
+      router.push({ name: "dashboard" });
+    })
+    .catch(() => {
+      feedbackMessage.value = "Email ou senha inválidos";
+    });
 }
 </script>
