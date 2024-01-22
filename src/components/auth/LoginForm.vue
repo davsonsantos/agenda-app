@@ -42,8 +42,11 @@
           size="large"
           block
           flat
-          >Acessar</v-btn
+          :disabled="isSubmitting"
         >
+          {{ isSubmitting ? "Acessando..." : "Acessaraaaaa" }}
+        </v-btn>
+        {{ isSubmitting }}
       </v-col>
     </v-row>
   </v-form>
@@ -51,7 +54,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { useForm, useField } from "vee-validate";
 import { object, string } from "yup";
 import { useAuthStore } from "@/store/auth";
@@ -68,7 +71,7 @@ const { handleSubmit, errors, isSubmitting } = useForm({
 });
 
 const submit = handleSubmit(async (values) => {
-  await login(values);
+  login(values);
 });
 
 const { value: email } = useField("email");
