@@ -44,7 +44,7 @@
           flat
           :disabled="isSubmitting"
         >
-          {{ isSubmitting ? "Acessando..." : "Acessaraaaaa" }}
+          {{ isSubmitting ? "Acessando..." : "Acessar" }}
         </v-btn>
         {{ isSubmitting }}
       </v-col>
