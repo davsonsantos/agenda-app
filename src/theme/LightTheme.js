@@ -1,5 +1,4 @@
-
-const PurpleTheme = {
+const PurpleTheme= {
     name: 'PurpleTheme',
     dark: false,
     variables: {
@@ -14,7 +13,7 @@ const PurpleTheme = {
         accent: '#FFAB91',
         warning: '#FFAE1F',
         error: '#FA896B',
-        muted: '#5a6a85',
+        muted:'#5a6a85',
         lightprimary: '#ECF2FF',
         lightsecondary: '#E8F7FF',
         lightsuccess: '#E6FFFA',
@@ -32,4 +31,4 @@ const PurpleTheme = {
         grey200: '#EAEFF4'
     }
 };
-export { PurpleTheme };
+export { PurpleTheme};
