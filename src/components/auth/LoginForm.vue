@@ -2,12 +2,13 @@
   <v-alert v-if="feedBackMessage" color="error" class="mb-3">{{
     feedBackMessage
   }}</v-alert>
-  <v-form @submit.prevent="login()">
+  <v-form @submit.prevent="submit()">
     <v-row class="d-flex mb-3">
       <v-col cols="12">
         <v-label class="font-weight-bold mb-1">E-mail</v-label>
         <v-text-field
           v-model="email"
+          :error-messages="errors.email"
           variant="outlined"
           color="primary"
           type="email"
@@ -17,6 +18,7 @@
         <v-label class="font-weight-bold mb-1">Senha</v-label>
         <v-text-field
           v-model="password"
+          :error-messages="errors.password"
           variant="outlined"
           type="password"
           color="primary"
@@ -41,6 +43,7 @@
           block
           flat
           :loading="loading"
+          :submitting="isSubmitting"
           >Acessar</v-btn
         >
       </v-col>
@@ -50,26 +53,44 @@
 
 <script setup>
 import { ref } from "vue";
-const checkbox = ref(true);
-
+import { useRouter } from "vue-router";
 import axios from "axios";
+import { useForm, useField } from "vee-validate";
+import { object, string } from "yup";
 
-axios.defaults.withCredentials = true;
-axios.defaults.withXSRFToken = true;
+const schame = object({
+  email: string()
+    .required("E-mail obrigatório")
+    .email("E-mail inválido")
+    .label("E-mail"),
+  password: string().required("Senha obrigatória").label("Senha"),
+});
+const { handleSubmit, errors, isSubmitting } = useForm({
+  validationSchema: schame,
+});
 
-const email = ref("");
-const password = ref("");
+const submit = handleSubmit(async (values) => {
+  await login(values);
+});
+
+const { value: email } = useField("email");
+const { value: password } = useField("password");
+
 const feedBackMessage = ref("");
 const loading = ref(false);
 
-function login() {
+const router = useRouter();
+function login(values) {
   loading.value = true;
   feedBackMessage.value = "";
-  axios.get("http://localhost:81/sanctum/csrf-cookie").then(() => {
+  axios.get("sanctum/csrf-cookie").then(() => {
     axios
-      .post("http://localhost:81/api/login", {
-        email: email.value,
-        password: password.value,
+      .post("api/login", {
+        email: values.email,
+        password: values.password,
+      })
+      .then(() => {
+        router.push({ name: "dashboard" });
       })
       .catch(() => {
         feedBackMessage.value = "E-mail ou senha inválidos";

@@ -1,5 +1,5 @@
-const AuthRoutes = {
-    path: '/auth',
+export default {
+    path: '/',
     component: () => import('@/layouts/blank/BlankLayout.vue'),
     meta: {
         requiresAuth: false
@@ -18,4 +18,3 @@ const AuthRoutes = {
     ]
 };
 
-export default AuthRoutes;
