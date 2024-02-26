@@ -3,7 +3,6 @@ node_modules
 /modernize
 
 # local env files
-.env
 .env.local
 .env.*.local
 
