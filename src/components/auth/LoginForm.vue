@@ -2,6 +2,7 @@
   <v-alert v-if="feedBackMessage" color="error" class="mb-3">{{
     feedBackMessage
   }}</v-alert>
+
   <v-form @submit.prevent="submit()">
     <v-row class="d-flex mb-3">
       <v-col cols="12">
@@ -36,6 +37,9 @@ import { useRouter } from "vue-router";
 import { useForm, useField } from "vee-validate";
 import { object, string } from "yup";
 import { useAuthStore } from "@/store/auth";
+import { useMeStore } from "@/store/me";
+
+const meStore = useMeStore();
 
 const schame = object({
   email: string()
@@ -68,18 +72,15 @@ const router = useRouter();
 function login(values) {
   loading.value = true;
   feedBackMessage.value = "";
-  authStore.sanctum()
+  authStore.login(values.email, values.password)
     .then(() => {
-      authStore.login(values.email, values.password)
-        .then(() => {
-          router.push({ name: "dashboard" });
-        })
-        .catch(() => {
-          feedBackMessage.value = "E-mail ou senha inválidos";
-        })
-        .finally(() => {
-          loading.value = false;
-        });
+      router.push({ name: "dashboard" });
+    })
+    .catch(() => {
+      feedBackMessage.value = "E-mail ou senha inválidos";
+    })
+    .finally(() => {
+      loading.value = false;
     });
 }
 </script>

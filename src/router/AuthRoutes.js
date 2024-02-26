@@ -1,9 +1,9 @@
+import { redirectIfAuthenticated } from '@/router/guards';
+
 export default {
     path: '/',
     component: () => import('@/layouts/blank/BlankLayout.vue'),
-    meta: {
-        requiresAuth: false
-    },
+    beforeEnter: redirectIfAuthenticated,
     children: [
         {
             name: 'login',

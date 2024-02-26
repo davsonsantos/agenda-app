@@ -2,14 +2,14 @@
     Dashboard
     <br><br>
     <pre>
-        {{ authStore.user }}
+        {{ meStore.user }}
     </pre>
     <br>
-    Ta logado? {{ authStore.isLoggedIn }}
+    Ta logado? {{ meStore.isLoggedIn }}
 </template>
 
 <script setup>
-import { useAuthStore } from '@/store/auth';
-const authStore = useAuthStore();
+import { useMeStore } from '@/store/me';
+const meStore = useMeStore();
 /*Call Components*/
 </script>

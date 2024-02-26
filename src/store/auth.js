@@ -1,13 +1,12 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import { useMeStore } from "@/store/me";
 
 /**
  * Auth store for managing user authentication
  */
 export const useAuthStore = defineStore("auth", {
-    state: () => ({
-        user: null
-    }),
+    state: () => ({}),
     actions: {
         /**
          * Retrieve CSRF token cookie
@@ -27,12 +26,10 @@ export const useAuthStore = defineStore("auth", {
                 email,
                 password
             }).then((response) => {
-                console.log(response);
-                this.user = response.data.data;
+                const meStore = useMeStore();
+                meStore.user = response.data.data;
             })
         }
     },
-    getters: {
-        isLoggedIn: (state) => !!state?.user?.id
-    }
+
 })
