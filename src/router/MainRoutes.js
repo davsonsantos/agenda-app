@@ -9,6 +9,6 @@ export default {
             name: 'dashboard',
             path: '/',
             component: () => import('@/views/dashboard/index.vue')
-        }
+        },
     ]
 };

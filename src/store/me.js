@@ -1,19 +1,20 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 import axios from "axios";
 
 export const useMeStore = defineStore('me', {
     state: () => ({
-        user: null
+        user: null,
     }),
+
     actions: {
         getMe() {
             return axios.get('api/me')
                 .then((response) => {
-                    console.log(response);
-                    this.user = response.data.data;
+                    this.user = response.data.data
                 })
         }
     },
+
     getters: {
         isLoggedIn: (state) => !!state?.user?.id
     }
