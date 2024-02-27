@@ -1,7 +1,4 @@
-<script setup lang="ts">
-import { ref } from 'vue';
-const checkbox = ref(true);
-</script>
+
 
 <template>
     <v-row class="d-flex mb-3">
@@ -18,7 +15,21 @@ const checkbox = ref(true);
             <v-text-field variant="outlined" type="password" hide-details color="primary"></v-text-field>
         </v-col>
         <v-col cols="12">
-            <v-btn to="/" color="primary" size="large" block flat>Sign up</v-btn>
+            <v-btn @click="register()" color="primary" size="large" block flat>Sign up</v-btn>
         </v-col>
     </v-row>
 </template>
+
+<script setup>
+import axios from "axios";
+
+function register() {
+    const data = {
+        first_name: "Outro",
+        last_name: "Usuário",
+        email: "teste@outro.com",
+        password: "12345678A"
+    };
+    axios.post('api/register', data);
+}
+</script>
