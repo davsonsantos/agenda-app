@@ -5,7 +5,7 @@ import { createApp } from 'vue'
 import pinia from './plugins/pinia'
 import vuetify from './plugins/vuetify'
 import '@/scss/style.scss';
-import './plugins/axios';
+import '@/plugins/axios';
 import { useMeStore } from '@/store/me'
 
 const app = createApp(App)
