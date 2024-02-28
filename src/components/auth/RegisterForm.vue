@@ -1,4 +1,5 @@
 <template>
+    <v-alert v-if="feedBackMessage" color="error" class="mb-3">{{ feedBackMessage }}</v-alert>
     <v-form @submit.prevent="submit">
         <v-row class="d-flex mb-3">
             <v-col cols="12">
@@ -20,7 +21,7 @@
                     color="primary" />
             </v-col>
             <v-col cols="12">
-                <v-btn type="submit" color="primary" size="large" block flat :submitting="isSubmitting">Cadastrar</v-btn>
+                <v-btn type="submit" color="primary" size="large" block flat :loading="isSubmitting">Cadastrar</v-btn>
             </v-col>
         </v-row>
     </v-form>
@@ -29,25 +30,39 @@
 <script setup>
 import { useField, useForm } from 'vee-validate';
 import { object, string } from 'yup';
+import { useAuthStore } from '@/store/auth';
 
 const schema = object({
     first_name: string().required("Nome é obrigatório").label("Nome"),
     last_name: string().required("Sobrenome é obrigatório").label("Sobrenome"),
     email: string().email().required("E-mail é obrigatório").label("E-mail"),
-    password: string().required("Senha é obrigatório").label("Senha"),
+    password: string().required("Senha é obrigatório").min(8, (data) => `Senha deve ter pelo menos ${data.min} caracteres`)
+        .matches(
+            /^(?=.*[a-zA-Z])(?=.*[0-9])/,
+            'Pelo menos uma letra e um número'
+        )
+        .label("Senha"),
 })
+const feedBackMessage = ref("");
 const { handleSubmit, errors, isSubmitting } = useForm({
     validationSchema: schema,
     initialValues: {
         first_name: 'Jon',
         last_name: 'Lenon',
         email: 'jon@lenon.com',
-        password: 'password'
+        password: 'password1'
     }
 })
 
 const submit = handleSubmit(async (value) => {
-    console.log(value);
+
+    feedBackMessage.value = "";
+    const authStore = useAuthStore()
+    await authStore.register(value.first_name, value.last_name, value.email, value.password)
+        .catch((e) => {
+            feedBackMessage.value = e.message
+        });
+
 });
 
 const { value: firstName } = useField('first_name')

@@ -1,8 +1,5 @@
 <template>
-  <v-alert v-if="feedBackMessage" color="error" class="mb-3">{{
-    feedBackMessage
-  }}</v-alert>
-
+  <v-alert v-if="feedBackMessage" color="error" class="mb-3">{{ feedBackMessage }}</v-alert>
   <v-form @submit.prevent="submit()">
     <v-row class="d-flex mb-3">
       <v-col cols="12">
@@ -42,10 +39,7 @@ import { useMeStore } from "@/store/me";
 const meStore = useMeStore();
 
 const schame = object({
-  email: string()
-    .required("E-mail obrigatório")
-    .email("E-mail inválido")
-    .label("E-mail"),
+  email: string().required("E-mail obrigatório").email("E-mail inválido").label("E-mail"),
   password: string().required("Senha obrigatória").label("Senha"),
 });
 const { handleSubmit, errors, isSubmitting } = useForm({
