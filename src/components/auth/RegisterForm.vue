@@ -1,5 +1,5 @@
 <template>
-    <v-alert v-if="feedBackMessage" color="error" class="mb-3">{{ feedBackMessage }}</v-alert>
+    <v-alert v-if="feedbackMessage" color="error" class="mb-3">{{ feedbackMessage }}</v-alert>
     <v-form @submit.prevent="submit">
         <v-row class="d-flex mb-3">
             <v-col cols="12">
@@ -31,6 +31,8 @@
 import { useField, useForm } from 'vee-validate';
 import { object, string } from 'yup';
 import { useAuthStore } from '@/store/auth';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const schema = object({
     first_name: string().required("Nome é obrigatório").label("Nome"),
@@ -43,7 +45,6 @@ const schema = object({
         )
         .label("Senha"),
 })
-const feedBackMessage = ref("");
 const { handleSubmit, errors, isSubmitting } = useForm({
     validationSchema: schema,
     initialValues: {
@@ -53,14 +54,17 @@ const { handleSubmit, errors, isSubmitting } = useForm({
         password: 'password1'
     }
 })
-
-const submit = handleSubmit(async (value) => {
-
-    feedBackMessage.value = "";
+const router = useRouter()
+const feedbackMessage = ref("");
+const submit = handleSubmit(async (values) => {
     const authStore = useAuthStore()
-    await authStore.register(value.first_name, value.last_name, value.email, value.password)
+    await authStore.register(values.first_name, values.last_name, values.email, values.password)
+        .then(async () => {
+            await authStore.login(values.email, values.password)
+            router.push({ name: 'dashboard' })
+        })
         .catch((e) => {
-            feedBackMessage.value = e.message
+            feedbackMessage.value = e.message
         });
 
 });

@@ -1,4 +1,4 @@
-import { redirectIfAuthenticated } from '@/router/guards';
+import { redirectIfAuthenticated, checkIfTokenExists } from '@/router/guards';
 
 export default [
     {
@@ -21,6 +21,18 @@ export default [
                 name: 'register',
                 path: '',
                 component: () => import('@/views/auth/Register.vue'),
+            },
+        ],
+    },
+    {
+        path: '/verificar-email',
+        component: () => import('@/layouts/blank/BlankLayout.vue'),
+        beforeEnter: checkIfTokenExists,
+        children: [
+            {
+                name: 'varify-email',
+                path: '',
+                component: () => import('@/views/auth/VerifyEmail.vue'),
             },
         ],
     },
