@@ -1,28 +1,51 @@
 <template>
-  <v-alert v-if="feedBackMessage" color="error" class="mb-3">{{ feedBackMessage }}</v-alert>
+  <v-alert v-if="feedBackMessage" color="error" class="mb-3">
+    {{ feedBackMessage }}
+  </v-alert>
   <v-form @submit.prevent="submit()">
     <v-row class="d-flex mb-3">
       <v-col cols="12">
         <v-label class="font-weight-bold mb-1">E-mail</v-label>
-        <v-text-field v-model="email" :error-messages="errors.email" variant="outlined" color="primary"
-          type="email"></v-text-field>
+        <v-text-field
+          v-model="email"
+          :error-messages="errors.email"
+          variant="outlined"
+          color="primary"
+          type="email"
+        ></v-text-field>
       </v-col>
       <v-col cols="12">
         <v-label class="font-weight-bold mb-1">Senha</v-label>
-        <v-text-field v-model="password" :error-messages="errors.password" variant="outlined" type="password"
-          color="primary"></v-text-field>
+        <v-text-field
+          v-model="password"
+          :error-messages="errors.password"
+          variant="outlined"
+          type="password"
+          color="primary"
+        />
       </v-col>
       <v-col cols="12" class="pt-0">
         <div class="d-flex flex-wrap align-center ml-n2">
           <div class="ml-sm-auto">
-            <RouterLink to="/" class="text-primary text-decoration-none text-body-1 opacity-1 font-weight-medium">Esqueceu
-              a senha?</RouterLink>
+            <RouterLink
+              :to="{ name: 'forgotPassword' }"
+              class="text-primary text-decoration-none text-body-1 opacity-1 font-weight-medium"
+              >Esqueceu a senha?
+            </RouterLink>
           </div>
         </div>
       </v-col>
       <v-col cols="12" class="pt-0">
-        <v-btn type="submit" color="primary" size="large" block flat :loading="loading"
-          :submitting="isSubmitting">Acessar</v-btn>
+        <v-btn
+          type="submit"
+          color="primary"
+          size="large"
+          block
+          flat
+          :loading="loading"
+          :submitting="isSubmitting"
+          >Acessar</v-btn
+        >
       </v-col>
     </v-row>
   </v-form>
@@ -39,15 +62,18 @@ import { useMeStore } from "@/store/me";
 const meStore = useMeStore();
 
 const schame = object({
-  email: string().required("E-mail obrigatório").email("E-mail inválido").label("E-mail"),
+  email: string()
+    .required("E-mail obrigatório")
+    .email("E-mail inválido")
+    .label("E-mail"),
   password: string().required("Senha obrigatória").label("Senha"),
 });
 const { handleSubmit, errors, isSubmitting } = useForm({
   validationSchema: schame,
   initialValues: {
-    email: 'test@example.com',
-    password: 'password'
-  }
+    email: "test@example.com",
+    password: "password",
+  },
 });
 
 const submit = handleSubmit(async (values) => {
@@ -66,7 +92,8 @@ const router = useRouter();
 function login(values) {
   loading.value = true;
   feedBackMessage.value = "";
-  authStore.login(values.email, values.password)
+  authStore
+    .login(values.email, values.password)
     .then(() => {
       router.push({ name: "dashboard" });
     })
