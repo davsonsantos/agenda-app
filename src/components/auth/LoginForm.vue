@@ -1,8 +1,9 @@
 <template>
-  <v-alert v-if="feedBackMessage" color="error" class="mb-3">
-    {{ feedBackMessage }}
-  </v-alert>
-  <v-form @submit.prevent="submit()">
+  <v-alert v-if="feedbackMessage" color="error" class="mb-2">{{
+    feedbackMessage
+  }}</v-alert>
+
+  <v-form @submit.prevent="submit">
     <v-row class="d-flex mb-3">
       <v-col cols="12">
         <v-label class="font-weight-bold mb-1">E-mail</v-label>
@@ -11,8 +12,7 @@
           :error-messages="errors.email"
           variant="outlined"
           color="primary"
-          type="email"
-        ></v-text-field>
+        />
       </v-col>
       <v-col cols="12">
         <v-label class="font-weight-bold mb-1">Senha</v-label>
@@ -30,7 +30,7 @@
             <RouterLink
               :to="{ name: 'forgotPassword' }"
               class="text-primary text-decoration-none text-body-1 opacity-1 font-weight-medium"
-              >Esqueceu a senha?
+              >Esqueceu sua senha?
             </RouterLink>
           </div>
         </div>
@@ -38,13 +38,12 @@
       <v-col cols="12" class="pt-0">
         <v-btn
           type="submit"
+          :loading="isSubmitting"
           color="primary"
           size="large"
           block
           flat
-          :loading="loading"
-          :submitting="isSubmitting"
-          >Acessar</v-btn
+          >Entrar</v-btn
         >
       </v-col>
     </v-row>
@@ -57,19 +56,14 @@ import { useRouter } from "vue-router";
 import { useForm, useField } from "vee-validate";
 import { object, string } from "yup";
 import { useAuthStore } from "@/store/auth";
-import { useMeStore } from "@/store/me";
 
-const meStore = useMeStore();
-
-const schame = object({
-  email: string()
-    .required("E-mail obrigatório")
-    .email("E-mail inválido")
-    .label("E-mail"),
-  password: string().required("Senha obrigatória").label("Senha"),
+const schema = object({
+  email: string().required().email().label("E-mail"),
+  password: string().required().label("Senha"),
 });
+
 const { handleSubmit, errors, isSubmitting } = useForm({
-  validationSchema: schame,
+  validationSchema: schema,
   initialValues: {
     email: "test@example.com",
     password: "password",
@@ -83,25 +77,21 @@ const submit = handleSubmit(async (values) => {
 const { value: email } = useField("email");
 const { value: password } = useField("password");
 
-const feedBackMessage = ref("");
-const loading = ref(false);
+const feedbackMessage = ref("");
 
 const authStore = useAuthStore();
+
 const router = useRouter();
 
 function login(values) {
-  loading.value = true;
-  feedBackMessage.value = "";
+  feedbackMessage.value = "";
   authStore
     .login(values.email, values.password)
     .then(() => {
       router.push({ name: "dashboard" });
     })
-    .catch(() => {
-      feedBackMessage.value = "E-mail ou senha inválidos";
-    })
-    .finally(() => {
-      loading.value = false;
+    .catch((e) => {
+      feedbackMessage.value = e.message;
     });
 }
 </script>
